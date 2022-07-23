@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body{
+                font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+        .msg{
+            color: red;
+            font-size: 15px;
+        }
+        #demo{
+            width: 20%;
+            height:auto;
+            margin-left: 3%;
+            margin-top: 30px;
+            border:none;
+            float: left;
+            
+        }
+        input{
+            width: 200px;
+            padding: 10px;
+            margin-right: 85%;
+            margin-bottom: 10px;
+           border-radius: 5px;
+        }
+        .wrong{
+            border: 2px solid red;
+        }
+        button{
+            width: auto;
+            height: 50px;
+            background-color:#0984e3;
+            color: white;
+            font-weight: 600;
+            border-radius: 10px;
+            
+        }
+        button:hover{
+            background-color:#74b9ff;
+        }
+        table{
+            width: 50%;
+            height: auto;
+            margin-top: 50px;
+            border-style:dotted; 
+            border: 2px groove black;
+            font-size: 20px;
+            text-align: center;
+            float: right;
+            color: rgb(221, 221, 221);
+            background-color: #2d3436;
+            border-radius: 10px;           
+        }
+        td{
+            width: 15%;
+            text-align: center;
+            border-right: 1px solid black;
+            border-top: 1px double black;
+        }
+    </style>
+</head>
+<body>
+    <button id="color">Try Your Color</button>
+    <div id="demo">
+        <h1>Register Page</h1>
+        Full Name : <input type="text" placeholder="please enter your Full name">
+        User Name : <input type="text" placeholder="please enter your User name">
+        Email : <input type="email" placeholder="please enter your Email">
+        Password  : <input type="number" placeholder="please enter your Password">
+        Confirm Password  : <input type="number" placeholder="please enter your Password">        
+        <button id="reg">Register</button>
+    </div>
+    <table>
+        <tr>
+            <th>Full Name</th>
+            <th>User Name</th>
+            <th>Email</th>
+            <th>Password</th>
+            <th>Actions</th>
+        </tr>
+        
+    </table>
+    
+
+    <script >
+        var color=document.getElementById("color");
+        color.addEventListener("click",()=>{
+            var r1=Math.floor( Math.random()*16);
+            var r2=Math.floor(Math.random()*16);
+            var r3=Math.floor(Math.random()*16);
+            var r4=Math.floor( Math.random()*16);
+            var r5=Math.floor(Math.random()*16);
+            var r6=Math.floor(Math.random()*16);
+            var allr=[r1.toString(),r2.toString(),r3.toString(),r4.toString(),r5.toString(),r6.toString()];
+            console.log("first arr "+ allr);
+            
+          
+            allr.forEach((letter)=>{
+                if(letter ==="10"){
+                   allr[ allr.indexOf(letter)]="A";
+                    console.log(allr.indexOf(letter));
+                    }
+                if(letter ==="11"){
+                    allr[ allr.indexOf(letter)]="B"; 
+                    console.log(allr.indexOf(letter));}
+                if(letter ==="12")
+                {
+                    allr[ allr.indexOf(letter)]="C"; }
+                if(letter=="13"){
+                    allr[ allr.indexOf(letter)]="D"; }
+                if(letter=="14"){
+                    allr[  allr.indexOf(letter)]="E";
+                    }
+                if(letter==15){
+                    allr[ allr.indexOf(letter)]="F"; }
+            })
+            console.log(allr);
+           console.log( allr[0] +allr[1]+allr[2]+allr[3]+allr[4]+allr[5]);
+           document.body.style.backgroundColor="#"+allr[0]+allr[1]+allr[2]+allr[3]+allr[4]+allr[5];
+        })
+
+        var user;
+        var u;
+        document.getElementById("reg").addEventListener("click",()=>{
+            document.querySelectorAll("input")[3].classList.remove("wrong");
+            document.querySelectorAll("input")[4].classList.remove("wrong");
+            var fullname=document.querySelectorAll("input")[0].value;
+            var username=document.querySelectorAll("input")[1].value;
+            var email=document.querySelectorAll("input")[2].value;
+            var password=document.querySelectorAll("input")[3].value;
+            
+            if(password ==document.querySelectorAll("input")[4].value){
+                    if(user==null){
+                    localStorage.clear();
+                        user=[[full = fullname,usname=username,Email=email,pass =password]];
+                        console.log("user=null"+user);
+                    localStorage.setItem('Users', JSON.stringify(user));
+                    } 
+                    else{
+                        user=[full = fullname,usname=username,Email=email,pass =password];
+                        u=JSON.parse(localStorage.getItem('Users'));
+                        u.push(user);   console.log("List u[1]: "+u[0]);
+                        localStorage.clear();
+                            localStorage.setItem('Users', JSON.stringify(u));    
+                    }
+            document.getElementsByTagName("table")[0].innerHTML +="<tr><td>"+fullname+"</td><td>"
+            +username+"</td><td>"+email+"</td><td>"+password+"</td><td>"+"<button class=\"edit\">Edit</button> <button class=\"delet\">Delete</button>"+"</td></tr>";
+            }
+            else{// FOR WRONG PASSWORD
+                var wrongmsg="<b class=\"msg\"> Wrong Password Please try again</b>";
+                document.querySelectorAll("input")[3].classList.add("wrong");
+                document.querySelectorAll("input")[4].classList.add("wrong");
+                document.getElementById("demo").innerHTML+=wrongmsg;
+            }
+            var delet=Array.from(document.querySelectorAll(".delet"));
+                delet.forEach((del)=>{
+                    del.addEventListener("click",()=>{
+                        var editarray=[];
+                        var ind =delet.indexOf(del);
+
+                    editarray=(JSON.parse(localStorage.getItem("Users"))) ;
+                    editarray.splice(ind,1);
+                           
+                        document.getElementsByTagName("tr")[ind+1].remove();
+                        delet.splice(ind,1);
+                        localStorage.clear();
+                    localStorage.setItem('Users', JSON.stringify(editarray));
+        
+                    })
+            })
+           var ed=Array.from(document.querySelectorAll(".edit"));
+           ed.forEach((edt)=>{
+               edt.addEventListener("click",()=>{
+               
+                   var editarray=[];
+                   editarray=(JSON.parse(localStorage.getItem("Users"))) ;
+                    fullname=document.querySelectorAll("input")[0].value;
+                     username=document.querySelectorAll("input")[1].value;
+                     email=document.querySelectorAll("input")[2].value;
+                     password=document.querySelectorAll("input")[3].value;
+                     user=[full = fullname,usname=username,Email=email,pass =password];
+                   editarray[ed.indexOf(edt)]=user;
+                   localStorage.clear();
+                   localStorage.setItem('Users', JSON.stringify(editarray));
+                  document.getElementsByTagName("tr")[ed.indexOf(edt)+1].childNodes[0].textContent=fullname;
+                  document.getElementsByTagName("tr")[ed.indexOf(edt)+1].childNodes[1].textContent=username;
+                  document.getElementsByTagName("tr")[ed.indexOf(edt)+1].childNodes[2].textContent=email;
+                  document.getElementsByTagName("tr")[ed.indexOf(edt)+1].childNodes[3].textContent=password;
+                  
+              
+           }) 
+           
+            })             
+        })
+    </script>
+</body>
+</html>
